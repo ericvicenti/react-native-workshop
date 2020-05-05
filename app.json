@@ -1,0 +1,17 @@
+{
+  "name": "TaskReactor",
+  "displayName": "TaskReactor",
+  "expo": {
+    "name": "TaskReactor",
+    "slug": "TaskReactor",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
