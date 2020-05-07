@@ -2,7 +2,7 @@ import * as React from "react";
 import { View, Button } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import TaskRow from "./3-TaskRow";
-import { useTaskList } from "../TaskLogic";
+import { useTaskList } from "../logic/TaskLogic";
 
 export default function HomeScreen({ navigation }: HomeScreenProps) {
   const tasks = useTaskList();

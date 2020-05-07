@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Text, Button } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { deleteTask, useTask } from "../TaskLogic";
+import { deleteTask, useTask } from "../logic/TaskLogic";
 
 export default function TaskScreen({ route, navigation }: TaskScreenProps) {
   const task = useTask(route.params.id);

@@ -1,4 +1,4 @@
-# Chapter 1 : Intro to Navigation
+# Intro to Navigation
 
 ## Navigation and Navigators
 

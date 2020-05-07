@@ -1,3 +1,4 @@
+import "react-native-gesture-handler";
 import * as React from "react";
 import { Text, Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
@@ -8,7 +9,7 @@ import TagsScreen from "./components/5-TagsScreen";
 import HomeScreen from "./components/5-HomeScreen";
 import TaskScreen from "./components/5-TaskScreen";
 import NewTaskScreen from "./components/5-NewTaskScreen";
-import { useTaskTitle } from "./TaskLogic";
+import { useTaskTitle } from "./logic/TaskLogic";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 function TaskTitle({ id }: { id: string }) {

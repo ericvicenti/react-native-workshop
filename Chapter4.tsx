@@ -1,3 +1,4 @@
+import "react-native-gesture-handler";
 import * as React from "react";
 import {
   View,
@@ -25,7 +26,7 @@ import {
   deleteTask,
   useTask,
   createTask,
-} from "./TaskLogic";
+} from "./logic/TaskLogic";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 import { StackNavigationProp } from "@react-navigation/stack";

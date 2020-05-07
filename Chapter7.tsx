@@ -1,10 +1,16 @@
+import "react-native-gesture-handler";
 import * as React from "react";
 import { View, Text, Button, Image, SafeAreaView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { ScrollView, TouchableHighlight } from "react-native-gesture-handler";
 import NewTaskScreen from "./components/5-NewTaskScreen";
-import { useTaskList, useTaskTitle, deleteTask, useTask } from "./TaskLogic";
+import {
+  useTaskList,
+  useTaskTitle,
+  deleteTask,
+  useTask,
+} from "./logic/TaskLogic";
 import {
   createSharedElementStackNavigator,
   SharedElement,
@@ -136,7 +142,7 @@ function MainStackScreen() {
         }}
         options={({ route, navigation }: any) => ({
           header: () => null,
-          gestureResponseDistance: 200,
+          gestureResponseDistance: 400,
           // title: <TaskTitle id={route.params.id} />,
           // headerRight: () => (
           //   <Button

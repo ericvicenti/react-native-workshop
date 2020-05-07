@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
-import { createTask } from "../TaskLogic";
+import { createTask } from "../logic/TaskLogic";
 
 export default function NewTaskScreen({ navigation }: any) {
   const [newTitle, setNewTitle] = React.useState("");

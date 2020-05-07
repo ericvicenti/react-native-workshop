@@ -1,3 +1,4 @@
+import "react-native-gesture-handler";
 import * as React from "react";
 import {
   View,
@@ -23,7 +24,7 @@ import {
   deleteTask,
   useTask,
   createTask,
-} from "./TaskLogic";
+} from "./logic/TaskLogic";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
 
