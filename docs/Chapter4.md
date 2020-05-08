@@ -4,8 +4,16 @@ Your designers and product managers come to you and say- great, glad we have som
 
 ## Nesting Navigators
 
-## Modal
+## Modal Stack
 
-## Tabs, Stack, Drawer, Modal
+## Tabs
+
+## Drawer
 
 ## Navigate across your app
+
+```js
+navigation.navigate("Support", {
+  screen: "ReportBug",
+});
+```

@@ -90,6 +90,14 @@ function TaskScreen({ route, navigation }: TaskScreenProps) {
         }}
         color="#922"
       />
+      <Button
+        title="See a bug?"
+        onPress={() => {
+          navigation.navigate("Support", {
+            screen: "ReportBug",
+          });
+        }}
+      />
     </ScrollView>
   );
 }

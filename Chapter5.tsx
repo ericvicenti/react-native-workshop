@@ -135,14 +135,29 @@ function App() {
   return (
     <NavigationContainer
       linking={{
-        prefixes: ["taskreact"],
+        prefixes: ["taskreact://"],
         config: {
-          NewTask: "new-task",
+          NewTask: "new_task",
           Main: {
-            // main screen in root modal stack
-            Home: {
-              // home tab
-              Home: "home", // home screen in tab stack
+            // Main Modal Screen
+            screens: {
+              // Home Tab
+              Home: {
+                initialRouteName: "Home",
+                screens: {
+                  Home: "home",
+                  Task: "task/:id",
+                },
+              },
+              Tags: {
+                path: "tags",
+              },
+              // Support Tab
+              Support: {
+                screens: {
+                  ReportBug: "report_bug",
+                },
+              },
             },
           },
         },
