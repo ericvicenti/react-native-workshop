@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import * as React from "react";
-import { Text, Button } from "react-native";
+import { Text, Button, Linking } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -11,6 +11,10 @@ import TaskScreen from "./components/5-TaskScreen";
 import NewTaskScreen from "./components/5-NewTaskScreen";
 import { useTaskTitle } from "./logic/TaskLogic";
 import Ionicons from "@expo/vector-icons/Ionicons";
+
+// Linking.addEventListener("url", (evt) => {
+//   console.log("url", evt);
+// });
 
 function TaskTitle({ id }: { id: string }) {
   const title = useTaskTitle(id);

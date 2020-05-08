@@ -1,5 +1,7 @@
 # Localization & Theming
 
+See the example code: [Chapter2.tsx](../Chapter2.tsx)
+
 ## useNavigation
 
 ## SafeAreaView

@@ -1,9 +1,11 @@
 import React from "react";
 
+type TaskId = string;
+type TaskStatus = "complete" | "aborted" | null;
 type Task = {
-  id: string;
+  id: TaskId;
   title: string;
-  isComplete: boolean | null;
+  status: TaskStatus;
   imageUri?: string;
 };
 
@@ -11,14 +13,14 @@ let taskList: Array<Task> = [
   {
     id: "1",
     title: "Build app",
-    isComplete: false,
+    status: null,
     imageUri:
       "https://vignette.wikia.nocookie.net/simpsons/images/0/09/800px-Springfield_Nuclear_Power_Plant.png/revision/latest/top-crop/width/360/height/360?cb=20170101231010",
   },
   {
     id: "2",
     title: "Test app",
-    isComplete: false,
+    status: null,
     imageUri:
       "https://www.power-technology.com/wp-content/uploads/sites/7/2020/04/air-air-pollution-chimney-clouds-459728.jpg",
   },
@@ -49,8 +51,18 @@ export function useTaskList(): Array<Task> {
   return internalList;
 }
 
-export function useTask(taskId: string): Task | undefined {
+export function useTask(taskId: TaskId): Task | undefined {
   return useTaskList().find((t) => t.id === taskId);
+}
+export function setTaskStatus(taskId: TaskId, status: TaskStatus): void {
+  updateTaskList(
+    taskList.map((task) => {
+      if (task.id !== taskId) {
+        return task;
+      }
+      return { ...task, status };
+    })
+  );
 }
 export function createTask(title: string) {
   idCount += 1;

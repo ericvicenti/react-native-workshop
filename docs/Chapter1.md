@@ -1,5 +1,7 @@
 # Intro to Navigation
 
+See the example code: [Chapter1.tsx](../Chapter1.tsx)
+
 ## Navigation and Navigators
 
 Explain container + navigators + stack

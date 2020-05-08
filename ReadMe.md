@@ -1,4 +1,4 @@
-# Task Reactor Workshop
+# React Native "Task Reactor" Workshop
 
 Goal: build a small task management app with navigation, animation and gestures.
 
@@ -34,8 +34,10 @@ Support external links to your app
 
 ### [9. Intro to Reanimated](./docs/Chapter9.md)
 
-### [10. aa](./docs/Chapter10.md)
+### [10. Custom Animations](./docs/Chapter10.md)
 
-### [11. aa](./docs/Chapter11.md)
+### [11. Intro to RN Gesture Handler](./docs/Chapter11.md)
 
-### [12. aa](./docs/Chapter12.md)
+### [12. Gesture Handler Pan Example](./docs/Chapter12.md)
+
+### 13. Bring It All Together?!

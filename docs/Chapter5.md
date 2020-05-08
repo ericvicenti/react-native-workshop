@@ -1,5 +1,7 @@
 # URIs and Deep Linking
 
+See the example code: [Chapter5.tsx](../Chapter5.tsx)
+
 ## Native Setup
 
 We will use uri-scheme to do the native configuration. Learn the commands with `npx uri-scheme -h`
@@ -34,7 +36,7 @@ Configure linking in the navigation container, providing your prefix, and a mapp
 ```
 function App() {
   const linking = {
-    prefixes: ['taskreact'],
+    prefixes: ['taskreact://'],
   });
   return <NavigationContainer linking={linking}>
     ...
