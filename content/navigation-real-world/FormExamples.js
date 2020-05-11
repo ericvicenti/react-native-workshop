@@ -10,40 +10,22 @@ import {
   Alert,
   BackHandler,
 } from "react-native";
-import {
-  NavigationContainer,
-  NavigationProp,
-  useFocusEffect,
-} from "@react-navigation/native";
+import { NavigationContainer, useFocusEffect } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { ScrollView } from "react-native-gesture-handler";
-import TaskRow from "./components/3-TaskRow";
+import TaskRow from "../../components/3-TaskRow";
 import {
   useTaskList,
   useTaskTitle,
   deleteTask,
   useTask,
   createTask,
-} from "./logic/TaskLogic";
+} from "../../logic/TaskLogic";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RouteProp } from "@react-navigation/native";
-
-type RootParamList = {
-  Home: undefined;
-  NewTask: undefined;
-  Task: { id: string };
-};
-type HomeScreenNavigationProp = StackNavigationProp<RootParamList, "Home">;
-
-type HomeScreenProps = {
-  navigation: HomeScreenNavigationProp;
-};
-
-function HomeScreen({ navigation }: HomeScreenProps) {
+function HomeScreen({ navigation }) {
   const tasks = useTaskList();
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
@@ -68,12 +50,7 @@ function HomeScreen({ navigation }: HomeScreenProps) {
   );
 }
 
-type TaskScreenProps = {
-  route: RouteProp<RootParamList, "Task">;
-  navigation: NavigationProp<RootParamList, "Task">;
-};
-
-function TaskScreen({ route, navigation }: TaskScreenProps) {
+function TaskScreen({ route, navigation }) {
   const task = useTask(route.params.id);
   if (!task) {
     return null;
@@ -101,10 +78,8 @@ function TaskScreen({ route, navigation }: TaskScreenProps) {
     </ScrollView>
   );
 }
-type NewTaskScreenProps = {
-  navigation: NavigationProp<RootParamList, "NewTask">;
-};
-function NewTaskScreen({ navigation }: NewTaskScreenProps) {
+
+function NewTaskScreen({ navigation }) {
   const [newTitle, setNewTitle] = React.useState("");
   useFocusEffect(
     React.useCallback(() => {
@@ -127,7 +102,7 @@ function NewTaskScreen({ navigation }: NewTaskScreenProps) {
     createTask(newTitle);
     navigation.goBack();
   }
-  function handleNewTitle(title: string) {
+  function handleNewTitle(title) {
     navigation.setOptions({
       gestureEnabled: title === "",
     });
@@ -162,7 +137,7 @@ function NewTaskScreen({ navigation }: NewTaskScreenProps) {
   );
 }
 
-function TaskTitle({ id }: { id: string }) {
+function TaskTitle({ id }) {
   const title = useTaskTitle(id);
   return <Text>{title}</Text>;
 }
@@ -171,7 +146,7 @@ function DiscussScreen() {
   return null;
 }
 
-function TagsScreen({ navigation }: any) {
+function TagsScreen({ navigation }) {
   const tasks = useTaskList();
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
@@ -204,7 +179,7 @@ function MainStackScreen() {
       <MainStack.Screen
         name="Task"
         component={TaskScreen}
-        options={({ route, navigation }: any) => ({
+        options={({ route, navigation }) => ({
           title: <TaskTitle id={route.params.id} />,
           headerRight: () => (
             <Button
@@ -243,7 +218,7 @@ function TagsStackScreen() {
       <TagStack.Screen
         name="Task"
         component={TaskScreen}
-        options={({ route, navigation }: any) => ({
+        options={({ route, navigation }) => ({
           title: <TaskTitle id={route.params.id} />,
           headerRight: () => (
             <Button

@@ -1,22 +1,18 @@
 import "react-native-gesture-handler";
 import * as React from "react";
-import { Text, Button, Linking } from "react-native";
+import { Text, Button, AsyncStorage } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import SupportScreen from "./components/5-SupportScreen";
-import TagsScreen from "./components/5-TagsScreen";
-import HomeScreen from "./components/5-HomeScreen";
-import TaskScreen from "./components/5-TaskScreen";
-import NewTaskScreen from "./components/5-NewTaskScreen";
-import { useTaskTitle } from "./logic/TaskLogic";
+import SupportScreen from "../../components/5-SupportScreen";
+import TagsScreen from "../../components/5-TagsScreen";
+import HomeScreen from "../../components/5-HomeScreen";
+import TaskScreen from "../../components/5-TaskScreen";
+import NewTaskScreen from "../../components/5-NewTaskScreen";
+import { useTaskTitle } from "../../logic/TaskLogic";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-// Linking.addEventListener("url", (evt) => {
-//   console.log("url", evt);
-// });
-
-function TaskTitle({ id }: { id: string }) {
+function TaskTitle({ id }) {
   const title = useTaskTitle(id);
   return <Text>{title}</Text>;
 }
@@ -135,36 +131,54 @@ function MainTabsScreen() {
 }
 
 const RootStack = createStackNavigator();
+
+const navPersistenceKey = "NavPersistence";
+
 function App() {
+  const [isReady, setIsReady] = React.useState(false);
+  const [initialState, setInitialState] = React.useState();
+
+  React.useEffect(() => {
+    const restoreState = async () => {
+      try {
+        const savedStateString = await AsyncStorage.getItem(navPersistenceKey);
+        const state = JSON.parse(savedStateString);
+
+        setInitialState(state);
+      } finally {
+        setIsReady(true);
+      }
+    };
+
+    if (!isReady) {
+      restoreState();
+    }
+  }, [isReady]);
+
+  if (!isReady) {
+    return null;
+  }
+
   return (
     <NavigationContainer
-      linking={{
-        prefixes: ["taskreact://"],
-        config: {
-          NewTask: "new_task",
-          Main: {
-            // Main Modal Screen
-            screens: {
-              // Home Tab
-              Home: {
-                initialRouteName: "Home",
-                screens: {
-                  Home: "home",
-                  Task: "task/:id",
-                },
-              },
-              Tags: {
-                path: "tags",
-              },
-              // Support Tab
-              Support: {
-                screens: {
-                  ReportBug: "report_bug",
-                },
-              },
-            },
-          },
-        },
+      initialState={initialState}
+      onStateChange={(state) => {
+        AsyncStorage.setItem(navPersistenceKey, JSON.stringify(state));
+
+        let walkState = state;
+        let routeString = "";
+        while (walkState) {
+          const route = walkState.routes[walkState.index];
+          walkState = route.state;
+          routeString += route.name + ",";
+          if (route.params)
+            routeString +=
+              Object.entries(route.params)
+                .map((e) => e[0] + ":" + e[1])
+                .join(",") + "/";
+        }
+        console.log("Look at this object for navigation analytics", state);
+        console.log(routeString);
       }}
     >
       <RootStack.Navigator mode="modal">

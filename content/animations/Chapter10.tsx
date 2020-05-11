@@ -3,19 +3,24 @@ import * as React from "react";
 import { Text, Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import HomeScreen from "./components/5-HomeScreen";
-import NewTaskScreen from "./components/5-NewTaskScreen";
+import HomeScreen from "../../components/5-HomeScreen";
+import NewTaskScreen from "../../components/5-NewTaskScreen";
 import {
   useTaskTitle,
   deleteTask,
   useTask,
   setTaskStatus,
-} from "./logic/TaskLogic";
+} from "../../logic/TaskLogic";
 import { ScrollView } from "react-native-gesture-handler";
-function TaskStatusRow({status, onTaskStatus}) {
-  return   <View style={{borderTopWidth: 1, borderBottomWidth}}>
 
+function TaskStatusRow({ status, onStatus }) {
+  return (
+    <View style={{ borderTopWidth: 1, borderBottomWidth }}>
+      <Text>{status}</Text>
+    </View>
+  );
 }
+
 function TaskScreen({ route, navigation }: TaskScreenProps) {
   const task = useTask(route.params.id);
   if (!task) {
@@ -50,7 +55,10 @@ function TaskScreen({ route, navigation }: TaskScreenProps) {
           : "Pending"}
       </Text>
 
-      <TaskStatusRow onTaskStatus={status => setTaskStatus(task.id, status)} />
+      <TaskStatusRow
+        status={status}
+        onStatus={(status) => setTaskStatus(task.id, status)}
+      />
 
       <Button
         title="Delete Task"

@@ -4,13 +4,13 @@ import { View, Text, Button, Image, SafeAreaView } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { ScrollView, TouchableHighlight } from "react-native-gesture-handler";
-import NewTaskScreen from "./components/5-NewTaskScreen";
+import NewTaskScreen from "../../components/5-NewTaskScreen";
 import {
   useTaskList,
   useTaskTitle,
   deleteTask,
   useTask,
-} from "./logic/TaskLogic";
+} from "../../logic/TaskLogic";
 import {
   createSharedElementStackNavigator,
   SharedElement,

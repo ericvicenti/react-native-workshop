@@ -1,4 +1,6 @@
 import "react-native-gesture-handler";
+import * as Localization from "expo-localization";
+import i18n from "i18n-js";
 import * as React from "react";
 import {
   View,
@@ -9,49 +11,40 @@ import {
 } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { ScrollView } from "react-native-gesture-handler";
-import { AppearanceProvider, useColorScheme } from "react-native-appearance";
-import {
-  NavigationContainer,
-  DefaultTheme,
-  DarkTheme,
-  useNavigation,
-  useTheme,
-} from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 
-const primaryColor = "rgb(85, 105, 225)";
-
-const AppLightTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: primaryColor,
-  },
+const en = {
+  taskReactor: "Task Reactor",
+  newTaskButton: "New Tasks..",
+  relatedTasks: "Related Tasks",
+  taskTitle: "{{title}}",
+  discuss: "discuss",
+  discussTitle: "{{title}}",
 };
 
-const AppDarkTheme = {
-  ...DarkTheme,
-  colors: {
-    ...DarkTheme.colors,
-    primary: primaryColor,
-  },
+const pr = {
+  taskReactor: "and a bottle of rum",
+  newTaskButton: "arr thing to do",
+  relatedTasks: "chained mateys",
+  taskTitle: "ye {{title}}",
+  discuss: "to the depths",
+  discussTitle: "olde {{title}}",
 };
+
+i18n.fallbacks = true;
+i18n.translations = { pr, en };
 
 const TranslationContext = React.createContext(null);
 
-const LANGUAGES = {
-  english: (str) => str,
-  pirate: (str) => `${str}, matey`,
-  // spanish: str => translateToSpanish(str),
-};
 function TranslationProvider({ children }) {
-  const [language, setLanguage] = React.useState("english");
+  const [locale, setLocale] = React.useState(Localization.locale); // en, pr
   const translationContext = React.useMemo(() => {
     return {
-      getTranslation: LANGUAGES[language],
-      language,
-      setLanguage,
+      t: (scope, options) => i18n.t(scope, { locale, ...options }),
+      locale,
+      setLocale,
     };
-  }, [language]);
+  }, [locale]);
   return (
     <TranslationContext.Provider value={translationContext}>
       {children}
@@ -60,17 +53,16 @@ function TranslationProvider({ children }) {
 }
 
 function useTranslator() {
-  return React.useContext(TranslationContext).getTranslation;
+  return React.useContext(TranslationContext).t;
 }
 
-function TaskLink({ title }: { title: string }) {
+function TaskLink({ title }) {
   const { push } = useNavigation();
-  const theme = useTheme();
   return (
     <View
       style={{
         borderBottomWidth: 1,
-        borderColor: theme.colors.border,
+        borderColor: "#ddd",
         alignSelf: "stretch",
       }}
     >
@@ -81,7 +73,7 @@ function TaskLink({ title }: { title: string }) {
       >
         <View
           style={{
-            backgroundColor: theme.colors.background,
+            backgroundColor: "white",
             alignSelf: "stretch",
           }}
         >
@@ -91,7 +83,7 @@ function TaskLink({ title }: { title: string }) {
                 padding: 20,
               }}
             >
-              <Text style={{ color: theme.colors.text }}>{title}</Text>
+              <Text>{title}</Text>
             </View>
           </SafeAreaView>
         </View>
@@ -101,26 +93,17 @@ function TaskLink({ title }: { title: string }) {
 }
 
 function SettingsView({}) {
-  const { setLanguage } = React.useContext(TranslationContext);
+  const { setLocale } = React.useContext(TranslationContext);
   return (
     <>
-      <ThemeButton
-        title="Language: English"
-        onPress={() => setLanguage("english")}
-      />
-      <ThemeButton
-        title="Language: Pirate"
-        onPress={() => setLanguage("pirate")}
-      />
+      <Button title="Language: English" onPress={() => setLocale("en")} />
+      <Button title="Language: Pirate" onPress={() => setLocale("pr")} />
     </>
   );
 }
 function RowContainer({ children }) {
-  const theme = useTheme();
   return (
-    <View style={{ borderTopWidth: 1, borderColor: theme.colors.border }}>
-      {children}
-    </View>
+    <View style={{ borderTopWidth: 1, borderColor: "#ddd" }}>{children}</View>
   );
 }
 function HomeScreen({ navigation }) {
@@ -132,8 +115,8 @@ function HomeScreen({ navigation }) {
         <TaskLink title="Task1" />
         <TaskLink title="Task2" />
       </RowContainer>
-      <ThemeButton
-        title={t("New Task...")}
+      <Button
+        title={t("newTaskButton")}
         onPress={() => {
           navigation.navigate("NewTask");
         }}
@@ -142,21 +125,13 @@ function HomeScreen({ navigation }) {
     </ScrollView>
   );
 }
-function ThemeButton(props) {
-  const theme = useTheme();
-  return <Button color={theme.colors.primary} {...props} />;
-}
-function TextRow({ children }) {
-  const theme = useTheme();
-  return <Text style={{ color: theme.colors.text }}>{children}</Text>;
-}
 
 function TaskScreen({ route }) {
   const t = useTranslator();
   return (
     <ScrollView style={{ flex: 1 }}>
-      <TextRow>{t(`Task: ${route.params.title}`)}</TextRow>
-      <TextRow>{t(`Other Tasks:`)}</TextRow>
+      <Text>{t("taskTitle", { title: route.params.title })}</Text>
+      <Text>{t("relatedTasks")}</Text>
       <TaskLink title="Task3" />
       <TaskLink title="Task4" />
     </ScrollView>
@@ -167,7 +142,7 @@ function DiscussScreen({ route }) {
   const t = useTranslator();
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>{t(`Discuss`)}</Text>
+      <Text>{t(`discuss`)}</Text>
     </View>
   );
 }
@@ -176,28 +151,25 @@ const Stack = createStackNavigator();
 
 function AppNavigator() {
   const t = useTranslator();
-  const scheme = useColorScheme();
 
   return (
-    <NavigationContainer
-      theme={scheme === "dark" ? AppDarkTheme : AppLightTheme}
-    >
+    <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
           name="Home"
           component={HomeScreen}
           options={{
-            title: t("TaskReactor"),
+            title: t("taskReactor"),
           }}
         />
         <Stack.Screen
           name="Task"
           component={TaskScreen}
           options={({ route, navigation }) => ({
-            title: t(route.params?.title),
+            title: t("taskTitle", { title: route.params?.title }),
             headerRight: () => (
-              <ThemeButton
-                title={t(`Discuss`)}
+              <Button
+                title={t(`discuss`)}
                 onPress={() => {
                   navigation.navigate("Discuss", {
                     title: route.params?.title,
@@ -211,7 +183,7 @@ function AppNavigator() {
           name="Discuss"
           component={DiscussScreen}
           options={({ route, navigation }) => ({
-            title: t(`Discuss ${route.params?.title}`),
+            title: t("discussTitle", { title: route.params?.title }),
           })}
         />
       </Stack.Navigator>
@@ -222,9 +194,7 @@ function AppNavigator() {
 function App() {
   return (
     <TranslationProvider>
-      <AppearanceProvider>
-        <AppNavigator />
-      </AppearanceProvider>
+      <AppNavigator />
     </TranslationProvider>
   );
 }
