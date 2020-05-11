@@ -8,7 +8,7 @@ https://reactnavigation.org/docs/pitch
 
 ## Creating a new app with React Navigation
 
-> Workshop Instructions: Start by checking out this repo, you won't actually need to create a new app. Also make sure you are fully set up to run react native apps on iOS or Android. Follow the [official RN guide)[https://reactnative.dev/docs/environment-setup], click "React Native CLI Quickstart", click your OS, then click iOS/Android.
+> Workshop Instructions: Start by checking out this repo, you won't actually need to create a new app. Also make sure you are fully set up to run react native apps on iOS or Android. Follow the [official RN guide](https://reactnative.dev/docs/environment-setup), click "React Native CLI Quickstart", click your OS, then click iOS/Android.
 
 ### New App Setup
 
@@ -20,7 +20,9 @@ This will set up a normal react native app that depends on open source Expo comp
 
 ### Navigation Dependencies
 
-According to https://reactnavigation.org/docs/getting-started, because we have a bare RN project, we need the following npm deps:
+Follow along https://reactnavigation.org/docs/getting-started
+
+Because we have a bare RN project, we need the following npm deps:
 
 - @react-navigation/native
 - react-native-reanimated

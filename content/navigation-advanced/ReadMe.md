@@ -2,8 +2,6 @@
 
 You can use a custom scheme on your device to open your app on iOS or Android, where the url starts with `myapp://`. Your website can also be configured to redirect to your app, when it is available. For this reason, it is
 
-See the example code: [Chapter5.tsx](../Chapter5.tsx)
-
 ## Native Setup
 
 We will use uri-scheme to do the native configuration. Learn the commands with `npx uri-scheme -h`
@@ -78,6 +76,10 @@ Make sure your state is:
 ## Container initialState
 
 ## Container onStateChange
+
+## User Navigation Analytics
+
+In addition to persisting the state, onStateChange is useful for reporting the user's navigation to an analytics server. You can look at the index and routes of the navigation state to determine the active route, which has a name and params. Repeat for children routes in route.state.
 
 ## Cautions with State Serialization
 
