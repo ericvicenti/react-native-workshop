@@ -9,15 +9,39 @@ import {
 } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { ScrollView } from "react-native-gesture-handler";
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { AppearanceProvider, useColorScheme } from "react-native-appearance";
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+  useNavigation,
+  useTheme,
+} from "@react-navigation/native";
+
+const AppLightTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: "rgb(85, 105, 225)",
+  },
+};
+
+const AppDarkTheme = {
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    primary: "salmon",
+  },
+};
 
 function TaskLink({ title }) {
   const { push } = useNavigation();
+  const theme = useTheme();
   return (
     <View
       style={{
         borderBottomWidth: 1,
-        borderColor: "#ddd",
+        borderColor: theme.colors.border,
         alignSelf: "stretch",
       }}
     >
@@ -28,7 +52,7 @@ function TaskLink({ title }) {
       >
         <View
           style={{
-            backgroundColor: "white",
+            backgroundColor: theme.colors.background,
             alignSelf: "stretch",
           }}
         >
@@ -38,7 +62,7 @@ function TaskLink({ title }) {
                 padding: 20,
               }}
             >
-              <Text>{title}</Text>
+              <Text style={{ color: theme.colors.text }}>{title}</Text>
             </View>
           </SafeAreaView>
         </View>
@@ -47,27 +71,12 @@ function TaskLink({ title }) {
   );
 }
 
-function SettingsView({}) {
-  return (
-    <>
-      <Button
-        title="Language: English"
-        onPress={() => {
-          // todo: set locale to en
-        }}
-      />
-      <Button
-        title="Language: Pirate"
-        onPress={() => {
-          // todo: set locale to pr
-        }}
-      />
-    </>
-  );
-}
 function RowContainer({ children }) {
+  const theme = useTheme();
   return (
-    <View style={{ borderTopWidth: 1, borderColor: "#ddd" }}>{children}</View>
+    <View style={{ borderTopWidth: 1, borderColor: theme.colors.border }}>
+      {children}
+    </View>
   );
 }
 function HomeScreen({ navigation }) {
@@ -77,16 +86,24 @@ function HomeScreen({ navigation }) {
         <TaskLink title="Task1" />
         <TaskLink title="Task2" />
       </RowContainer>
-      <SettingsView />
+      <ThemeButton title="New Task..." onPress={() => {}} />
     </ScrollView>
   );
+}
+function ThemeButton(props) {
+  const theme = useTheme();
+  return <Button color={theme.colors.primary} {...props} />;
+}
+function TextRow({ children }) {
+  const theme = useTheme();
+  return <Text style={{ color: theme.colors.text }}>{children}</Text>;
 }
 
 function TaskScreen({ route }) {
   return (
     <ScrollView style={{ flex: 1 }}>
-      <Text>{route.params.title}</Text>
-      <Text>Related Tasks</Text>
+      <TextRow>Task: {route.params.title}</TextRow>
+      <TextRow>Other Tasks:</TextRow>
       <TaskLink title="Task3" />
       <TaskLink title="Task4" />
     </ScrollView>
@@ -104,14 +121,18 @@ function DiscussScreen({ route }) {
 const Stack = createStackNavigator();
 
 function AppNavigator() {
+  const scheme = useColorScheme();
+
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      theme={scheme === "dark" ? AppDarkTheme : AppLightTheme}
+    >
       <Stack.Navigator>
         <Stack.Screen
           name="Home"
           component={HomeScreen}
           options={{
-            title: "Task Reactor",
+            title: "TaskReactor",
           }}
         />
         <Stack.Screen
@@ -120,7 +141,7 @@ function AppNavigator() {
           options={({ route, navigation }) => ({
             title: route.params?.title,
             headerRight: () => (
-              <Button
+              <ThemeButton
                 title="Discuss"
                 onPress={() => {
                   navigation.navigate("Discuss", {
@@ -143,4 +164,11 @@ function AppNavigator() {
   );
 }
 
-export default AppNavigator;
+function App() {
+  return (
+    <AppearanceProvider>
+      <AppNavigator />
+    </AppearanceProvider>
+  );
+}
+export default App;

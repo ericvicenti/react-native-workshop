@@ -1,16 +1,7 @@
 import "react-native-gesture-handler";
 import * as React from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  KeyboardAvoidingView,
-  Platform,
-  Alert,
-  BackHandler,
-} from "react-native";
-import { NavigationContainer, useFocusEffect } from "@react-navigation/native";
+import { View, Text, TextInput, Button } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -81,22 +72,7 @@ function TaskScreen({ route, navigation }) {
 
 function NewTaskScreen({ navigation }) {
   const [newTitle, setNewTitle] = React.useState("");
-  useFocusEffect(
-    React.useCallback(() => {
-      const onBackPress = () => {
-        if (newTitle === "") {
-          return false;
-        } else {
-          Alert.alert("Unfinished changes");
-          return true;
-        }
-      };
-      BackHandler.addEventListener("hardwareBackPress", onBackPress);
-      return () => {
-        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
-      };
-    }, [newTitle === ""])
-  );
+
   function handleSubmit() {
     if (newTitle === "") return;
     createTask(newTitle);
@@ -109,31 +85,23 @@ function NewTaskScreen({ navigation }) {
     setNewTitle(title);
   }
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      enabled
-      keyboardVerticalOffset={0}
-    >
-      <ScrollView style={{ flex: 1 }}>
-        <View style={{ height: 10 }} />
-        <TextInput
-          autoFocus
-          value={newTitle}
-          onChangeText={handleNewTitle}
-          onSubmitEditing={handleSubmit}
-          style={{
-            backgroundColor: "white",
-            padding: 16,
-            borderTopWidth: 1,
-            borderBottomWidth: 1,
-            borderColor: "#ddd",
-            marginVertical: 10,
-          }}
-        />
-        <Button title="Submit" onPress={handleSubmit} />
-      </ScrollView>
-    </KeyboardAvoidingView>
+    <ScrollView style={{ flex: 1 }}>
+      <View style={{ height: 10 }} />
+      <TextInput
+        value={newTitle}
+        onChangeText={handleNewTitle}
+        onSubmitEditing={handleSubmit}
+        style={{
+          backgroundColor: "white",
+          padding: 16,
+          borderTopWidth: 1,
+          borderBottomWidth: 1,
+          borderColor: "#ddd",
+          marginVertical: 10,
+        }}
+      />
+      <Button title="Submit" onPress={handleSubmit} />
+    </ScrollView>
   );
 }
 

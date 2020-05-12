@@ -9,39 +9,15 @@ import {
 } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { ScrollView } from "react-native-gesture-handler";
-import { AppearanceProvider, useColorScheme } from "react-native-appearance";
-import {
-  NavigationContainer,
-  DefaultTheme,
-  DarkTheme,
-  useNavigation,
-  useTheme,
-} from "@react-navigation/native";
-
-const AppLightTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: "rgb(85, 105, 225)",
-  },
-};
-
-const AppDarkTheme = {
-  ...DarkTheme,
-  colors: {
-    ...DarkTheme.colors,
-    primary: "salmon",
-  },
-};
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 
 function TaskLink({ title }) {
   const { push } = useNavigation();
-  const theme = useTheme();
   return (
     <View
       style={{
         borderBottomWidth: 1,
-        borderColor: theme.colors.border,
+        borderColor: "#ddd",
         alignSelf: "stretch",
       }}
     >
@@ -52,7 +28,7 @@ function TaskLink({ title }) {
       >
         <View
           style={{
-            backgroundColor: theme.colors.background,
+            backgroundColor: "white",
             alignSelf: "stretch",
           }}
         >
@@ -62,7 +38,7 @@ function TaskLink({ title }) {
                 padding: 20,
               }}
             >
-              <Text style={{ color: theme.colors.text }}>{title}</Text>
+              <Text>{title}</Text>
             </View>
           </SafeAreaView>
         </View>
@@ -72,11 +48,8 @@ function TaskLink({ title }) {
 }
 
 function RowContainer({ children }) {
-  const theme = useTheme();
   return (
-    <View style={{ borderTopWidth: 1, borderColor: theme.colors.border }}>
-      {children}
-    </View>
+    <View style={{ borderTopWidth: 1, borderColor: "#ddd" }}>{children}</View>
   );
 }
 function HomeScreen({ navigation }) {
@@ -86,29 +59,16 @@ function HomeScreen({ navigation }) {
         <TaskLink title="Task1" />
         <TaskLink title="Task2" />
       </RowContainer>
-      <ThemeButton
-        title="New Task..."
-        onPress={() => {
-          navigation.navigate("NewTask");
-        }}
-      />
+      <Button title="New Task..." onPress={() => {}} />
     </ScrollView>
   );
-}
-function ThemeButton(props) {
-  const theme = useTheme();
-  return <Button color={theme.colors.primary} {...props} />;
-}
-function TextRow({ children }) {
-  const theme = useTheme();
-  return <Text style={{ color: theme.colors.text }}>{children}</Text>;
 }
 
 function TaskScreen({ route }) {
   return (
     <ScrollView style={{ flex: 1 }}>
-      <TextRow>Task: {route.params.title}</TextRow>
-      <TextRow>Other Tasks:</TextRow>
+      <Text>Task: {route.params.title}</Text>
+      <Text>Other Tasks:</Text>
       <TaskLink title="Task3" />
       <TaskLink title="Task4" />
     </ScrollView>
@@ -126,12 +86,8 @@ function DiscussScreen({ route }) {
 const Stack = createStackNavigator();
 
 function AppNavigator() {
-  const scheme = useColorScheme();
-
   return (
-    <NavigationContainer
-      theme={scheme === "dark" ? AppDarkTheme : AppLightTheme}
-    >
+    <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
           name="Home"
@@ -146,7 +102,7 @@ function AppNavigator() {
           options={({ route, navigation }) => ({
             title: route.params?.title,
             headerRight: () => (
-              <ThemeButton
+              <Button
                 title="Discuss"
                 onPress={() => {
                   navigation.navigate("Discuss", {
@@ -169,11 +125,4 @@ function AppNavigator() {
   );
 }
 
-function App() {
-  return (
-    <AppearanceProvider>
-      <AppNavigator />
-    </AppearanceProvider>
-  );
-}
-export default App;
+export default AppNavigator;

@@ -1,4 +1,6 @@
 import "react-native-gesture-handler";
+import * as Localization from "expo-localization";
+import i18n from "i18n-js";
 import * as React from "react";
 import {
   View,
@@ -10,6 +12,47 @@ import {
 import { createStackNavigator } from "@react-navigation/stack";
 import { ScrollView } from "react-native-gesture-handler";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
+
+const en = {
+  taskReactor: "Task Reactor",
+  relatedTasks: "Related Tasks",
+  taskTitle: "{{title}}",
+  discuss: "discuss",
+  discussTitle: "{{title}}",
+};
+
+const pr = {
+  taskReactor: "and a bottle of rum",
+  relatedTasks: "chained mateys",
+  taskTitle: "ye {{title}}",
+  discuss: "to the depths",
+  discussTitle: "olde {{title}}",
+};
+
+i18n.fallbacks = true;
+i18n.translations = { pr, en };
+
+const TranslationContext = React.createContext(null);
+
+function TranslationProvider({ children }) {
+  const [locale, setLocale] = React.useState(Localization.locale); // en, pr
+  const translationContext = React.useMemo(() => {
+    return {
+      t: (scope, options) => i18n.t(scope, { locale, ...options }),
+      locale,
+      setLocale,
+    };
+  }, [locale]);
+  return (
+    <TranslationContext.Provider value={translationContext}>
+      {children}
+    </TranslationContext.Provider>
+  );
+}
+
+function useTranslator() {
+  return React.useContext(TranslationContext).t;
+}
 
 function TaskLink({ title }) {
   const { push } = useNavigation();
@@ -48,20 +91,11 @@ function TaskLink({ title }) {
 }
 
 function SettingsView({}) {
+  const { setLocale } = React.useContext(TranslationContext);
   return (
     <>
-      <Button
-        title="Language: English"
-        onPress={() => {
-          // todo: set locale to en
-        }}
-      />
-      <Button
-        title="Language: Pirate"
-        onPress={() => {
-          // todo: set locale to pr
-        }}
-      />
+      <Button title="Language: English" onPress={() => setLocale("en")} />
+      <Button title="Language: Pirate" onPress={() => setLocale("pr")} />
     </>
   );
 }
@@ -71,6 +105,8 @@ function RowContainer({ children }) {
   );
 }
 function HomeScreen({ navigation }) {
+  const t = useTranslator();
+
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
       <RowContainer>
@@ -83,10 +119,11 @@ function HomeScreen({ navigation }) {
 }
 
 function TaskScreen({ route }) {
+  const t = useTranslator();
   return (
     <ScrollView style={{ flex: 1 }}>
-      <Text>{route.params.title}</Text>
-      <Text>Related Tasks</Text>
+      <Text>{t("taskTitle", { title: route.params.title })}</Text>
+      <Text>{t("relatedTasks")}</Text>
       <TaskLink title="Task3" />
       <TaskLink title="Task4" />
     </ScrollView>
@@ -94,9 +131,10 @@ function TaskScreen({ route }) {
 }
 
 function DiscussScreen({ route }) {
+  const t = useTranslator();
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Discuss</Text>
+      <Text>{t(`discuss`)}</Text>
     </View>
   );
 }
@@ -104,6 +142,8 @@ function DiscussScreen({ route }) {
 const Stack = createStackNavigator();
 
 function AppNavigator() {
+  const t = useTranslator();
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -111,17 +151,17 @@ function AppNavigator() {
           name="Home"
           component={HomeScreen}
           options={{
-            title: "Task Reactor",
+            title: t("taskReactor"),
           }}
         />
         <Stack.Screen
           name="Task"
           component={TaskScreen}
           options={({ route, navigation }) => ({
-            title: route.params?.title,
+            title: t("taskTitle", { title: route.params?.title }),
             headerRight: () => (
               <Button
-                title="Discuss"
+                title={t(`discuss`)}
                 onPress={() => {
                   navigation.navigate("Discuss", {
                     title: route.params?.title,
@@ -135,7 +175,7 @@ function AppNavigator() {
           name="Discuss"
           component={DiscussScreen}
           options={({ route, navigation }) => ({
-            title: `Discuss ${route.params?.title}`,
+            title: t("discussTitle", { title: route.params?.title }),
           })}
         />
       </Stack.Navigator>
@@ -143,4 +183,11 @@ function AppNavigator() {
   );
 }
 
-export default AppNavigator;
+function App() {
+  return (
+    <TranslationProvider>
+      <AppNavigator />
+    </TranslationProvider>
+  );
+}
+export default App;

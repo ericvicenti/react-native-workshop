@@ -35,7 +35,7 @@ function MainStackScreen() {
       <MainStack.Screen
         name="Task"
         component={TaskScreen}
-        options={({ route, navigation }: any) => ({
+        options={({ route, navigation }) => ({
           title: <TaskTitle id={route.params.id} />,
           headerRight: () => (
             <Button
@@ -74,7 +74,7 @@ function TagsStackScreen() {
       <TagStack.Screen
         name="Task"
         component={TaskScreen}
-        options={({ route, navigation }: any) => ({
+        options={({ route, navigation }) => ({
           title: <TaskTitle id={route.params.id} />,
           headerRight: () => (
             <Button
