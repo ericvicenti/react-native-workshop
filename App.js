@@ -1,4 +1,6 @@
-import App from "./content/navigation-fundamentals/BasicStack";
+import App from "./Welcome";
+
+// import App from "./content/navigation-fundamentals/BasicStack";
 // import App from "./content/navigation-fundamentals/FullApp";
 
 // import App from "./content/navigation-real-world/SafeArea";

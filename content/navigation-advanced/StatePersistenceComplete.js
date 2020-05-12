@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import * as React from "react";
-import { Text, Button } from "react-native";
+import { Text, Button, AsyncStorage } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -132,9 +132,55 @@ function MainTabsScreen() {
 
 const RootStack = createStackNavigator();
 
+const navPersistenceKey = "NavPersistence";
+
 function App() {
+  const [isReady, setIsReady] = React.useState(false);
+  const [initialState, setInitialState] = React.useState();
+
+  React.useEffect(() => {
+    const restoreState = async () => {
+      try {
+        const savedStateString = await AsyncStorage.getItem(navPersistenceKey);
+        const state = JSON.parse(savedStateString);
+
+        setInitialState(state);
+      } finally {
+        setIsReady(true);
+      }
+    };
+
+    if (!isReady) {
+      restoreState();
+    }
+  }, [isReady]);
+
+  if (!isReady) {
+    return null;
+  }
+
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      initialState={initialState}
+      onStateChange={(state) => {
+        AsyncStorage.setItem(navPersistenceKey, JSON.stringify(state));
+
+        let walkState = state;
+        let routeString = "";
+        while (walkState) {
+          const route = walkState.routes[walkState.index];
+          walkState = route.state;
+          routeString += route.name + ",";
+          if (route.params)
+            routeString +=
+              Object.entries(route.params)
+                .map((e) => e[0] + ":" + e[1])
+                .join(",") + "/";
+        }
+        console.log("Look at this object for navigation analytics", state);
+        console.log(routeString);
+      }}
+    >
       <RootStack.Navigator mode="modal">
         <RootStack.Screen
           name="Main"

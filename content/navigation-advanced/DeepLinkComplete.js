@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import * as React from "react";
-import { Text, Button } from "react-native";
+import { Text, Button, Linking } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -11,6 +11,10 @@ import TaskScreen from "../../components/5-TaskScreen";
 import NewTaskScreen from "../../components/5-NewTaskScreen";
 import { useTaskTitle } from "../../logic/TaskLogic";
 import Ionicons from "@expo/vector-icons/Ionicons";
+
+// Linking.addEventListener("url", (evt) => {
+//   console.log("url", evt);
+// });
 
 function TaskTitle({ id }) {
   const title = useTaskTitle(id);
@@ -35,7 +39,7 @@ function MainStackScreen() {
       <MainStack.Screen
         name="Task"
         component={TaskScreen}
-        options={({ route, navigation }: any) => ({
+        options={({ route, navigation }) => ({
           title: <TaskTitle id={route.params.id} />,
           headerRight: () => (
             <Button
@@ -74,7 +78,7 @@ function TagsStackScreen() {
       <TagStack.Screen
         name="Task"
         component={TaskScreen}
-        options={({ route, navigation }: any) => ({
+        options={({ route, navigation }) => ({
           title: <TaskTitle id={route.params.id} />,
           headerRight: () => (
             <Button
@@ -131,10 +135,38 @@ function MainTabsScreen() {
 }
 
 const RootStack = createStackNavigator();
-
 function App() {
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      linking={{
+        prefixes: ["taskreact://"],
+        config: {
+          NewTask: "new_task",
+          Main: {
+            // Main Modal Screen
+            screens: {
+              // Home Tab
+              Home: {
+                initialRouteName: "Home",
+                screens: {
+                  Home: "home",
+                  Task: "task/:id",
+                },
+              },
+              Tags: {
+                path: "tags",
+              },
+              // Support Tab
+              Support: {
+                screens: {
+                  ReportBug: "report_bug",
+                },
+              },
+            },
+          },
+        },
+      }}
+    >
       <RootStack.Navigator mode="modal">
         <RootStack.Screen
           name="Main"

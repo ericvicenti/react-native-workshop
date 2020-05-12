@@ -11,12 +11,8 @@ import {
   deleteTask,
   useTask,
 } from "../../logic/TaskLogic";
-import {
-  createSharedElementStackNavigator,
-  SharedElement,
-} from "react-navigation-shared-element";
 
-function TaskRow({ task, onPress }: any) {
+function TaskRow({ task, onPress }) {
   return (
     <View
       style={{
@@ -33,12 +29,10 @@ function TaskRow({ task, onPress }: any) {
               flexDirection: "row",
             }}
           >
-            <SharedElement id={`task.${task.id}.photo`}>
-              <Image
-                style={{ width: 100, height: 100 }}
-                source={{ uri: task.imageUri }}
-              />
-            </SharedElement>
+            <Image
+              style={{ width: 100, height: 100 }}
+              source={{ uri: task.imageUri }}
+            />
             <View style={{ padding: 16, alignSelf: "center" }}>
               <Text>{task.title}</Text>
             </View>
@@ -49,7 +43,7 @@ function TaskRow({ task, onPress }: any) {
   );
 }
 
-function HomeScreen({ navigation }: any) {
+function HomeScreen({ navigation }) {
   const tasks = useTaskList();
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
@@ -74,19 +68,17 @@ function HomeScreen({ navigation }: any) {
   );
 }
 
-function TaskScreen({ route, navigation }: any) {
+function TaskScreen({ route, navigation }) {
   const task = useTask(route.params.id);
   if (!task) {
     return null;
   }
   return (
     <ScrollView style={{ flex: 1 }}>
-      <SharedElement id={`task.${task.id}.photo`}>
-        <Image
-          style={{ aspectRatio: 1, alignSelf: "stretch" }}
-          source={{ uri: task.imageUri }}
-        />
-      </SharedElement>
+      <Image
+        style={{ aspectRatio: 1, alignSelf: "stretch" }}
+        source={{ uri: task.imageUri }}
+      />
       <View
         style={{
           position: "absolute",
@@ -112,16 +104,12 @@ function TaskScreen({ route, navigation }: any) {
     </ScrollView>
   );
 }
-function TaskTitle({ id }: { id: string }) {
-  const title = useTaskTitle(id);
-  return <Text>{title}</Text>;
-}
 
 function DiscussScreen() {
   return null;
 }
 
-const MainStack = createSharedElementStackNavigator();
+const MainStack = createStackNavigator();
 function MainStackScreen() {
   return (
     <MainStack.Navigator mode="modal">
@@ -129,32 +117,15 @@ function MainStackScreen() {
         name="Home"
         component={HomeScreen}
         options={{
-          // title: "Task Reactor!",
-          header: () => null,
+          title: "Task Reactor!",
         }}
       />
       <MainStack.Screen
         name="Task"
         component={TaskScreen}
-        sharedElementsConfig={(route, otherRoute, showing) => {
-          const { id } = route.params;
-          return [`task.${id}.photo`];
-        }}
-        options={({ route, navigation }: any) => ({
-          header: () => null,
+        options={({ route, navigation }) => ({
+          title: "Task",
           gestureResponseDistance: 400,
-          // title: <TaskTitle id={route.params.id} />,
-          // headerRight: () => (
-          //   <Button
-          //     title="Discuss"
-          //     color="#239"
-          //     onPress={() => {
-          //       navigation.navigate("Discuss", {
-          //         id: route.params.id,
-          //       });
-          //     }}
-          //   />
-          // ),
         })}
       />
       <MainStack.Screen

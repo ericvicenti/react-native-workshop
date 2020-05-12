@@ -16,7 +16,7 @@ import {
   SharedElement,
 } from "react-navigation-shared-element";
 
-function TaskRow({ task, onPress }: any) {
+function TaskRow({ task, onPress }) {
   return (
     <View
       style={{
@@ -49,7 +49,7 @@ function TaskRow({ task, onPress }: any) {
   );
 }
 
-function HomeScreen({ navigation }: any) {
+function HomeScreen({ navigation }) {
   const tasks = useTaskList();
   return (
     <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flex: 1 }}>
@@ -74,7 +74,7 @@ function HomeScreen({ navigation }: any) {
   );
 }
 
-function TaskScreen({ route, navigation }: any) {
+function TaskScreen({ route, navigation }) {
   const task = useTask(route.params.id);
   if (!task) {
     return null;
@@ -112,10 +112,6 @@ function TaskScreen({ route, navigation }: any) {
     </ScrollView>
   );
 }
-function TaskTitle({ id }: { id: string }) {
-  const title = useTaskTitle(id);
-  return <Text>{title}</Text>;
-}
 
 function DiscussScreen() {
   return null;
@@ -129,8 +125,7 @@ function MainStackScreen() {
         name="Home"
         component={HomeScreen}
         options={{
-          // title: "Task Reactor!",
-          header: () => null,
+          headerShown: false,
         }}
       />
       <MainStack.Screen
@@ -140,21 +135,9 @@ function MainStackScreen() {
           const { id } = route.params;
           return [`task.${id}.photo`];
         }}
-        options={({ route, navigation }: any) => ({
-          header: () => null,
+        options={({ route, navigation }) => ({
+          headerShown: false,
           gestureResponseDistance: 400,
-          // title: <TaskTitle id={route.params.id} />,
-          // headerRight: () => (
-          //   <Button
-          //     title="Discuss"
-          //     color="#239"
-          //     onPress={() => {
-          //       navigation.navigate("Discuss", {
-          //         id: route.params.id,
-          //       });
-          //     }}
-          //   />
-          // ),
         })}
       />
       <MainStack.Screen

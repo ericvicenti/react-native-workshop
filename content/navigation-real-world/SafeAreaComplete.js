@@ -1,6 +1,11 @@
 import "react-native-gesture-handler";
 import * as React from "react";
 import { View, Text, Button, TouchableHighlight } from "react-native";
+import {
+  SafeAreaProvider,
+  SafeAreaView,
+  useSafeArea,
+} from "react-native-safe-area-context";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { ScrollView } from "react-native-gesture-handler";
@@ -8,6 +13,7 @@ import { NavigationContainer, useNavigation } from "@react-navigation/native";
 
 function TaskLink({ title }) {
   const { push } = useNavigation();
+  const insets = useSafeArea();
   return (
     <View
       style={{
@@ -26,7 +32,8 @@ function TaskLink({ title }) {
             backgroundColor: "white",
             alignSelf: "stretch",
             paddingVertical: 20,
-            paddingHorizontal: 20,
+            paddingLeft: insets.left + 20,
+            paddingRight: insets.right + 20,
           }}
         >
           <Text>{title}</Text>
@@ -72,7 +79,9 @@ function TaskScreen({ route }) {
 function DiscussScreen({ route }) {
   return (
     <View style={{ flex: 1 }}>
-      <Text>Discuss</Text>
+      <SafeAreaView>
+        <Text>Discuss</Text>
+      </SafeAreaView>
     </View>
   );
 }
@@ -81,41 +90,43 @@ const Stack = createStackNavigator();
 
 function AppNavigator() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{
-            title: "TaskReactor",
-          }}
-        />
-        <Stack.Screen
-          name="Task"
-          component={TaskScreen}
-          options={({ route, navigation }) => ({
-            title: route.params?.title,
-            headerRight: () => (
-              <Button
-                title="Discuss"
-                onPress={() => {
-                  navigation.navigate("Discuss", {
-                    title: route.params?.title,
-                  });
-                }}
-              />
-            ),
-          })}
-        />
-        <Stack.Screen
-          name="Discuss"
-          component={DiscussScreen}
-          options={({ route, navigation }) => ({
-            header: () => null,
-          })}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="Home"
+            component={HomeScreen}
+            options={{
+              title: "TaskReactor",
+            }}
+          />
+          <Stack.Screen
+            name="Task"
+            component={TaskScreen}
+            options={({ route, navigation }) => ({
+              title: route.params?.title,
+              headerRight: () => (
+                <Button
+                  title="Discuss"
+                  onPress={() => {
+                    navigation.navigate("Discuss", {
+                      title: route.params?.title,
+                    });
+                  }}
+                />
+              ),
+            })}
+          />
+          <Stack.Screen
+            name="Discuss"
+            component={DiscussScreen}
+            options={({ route, navigation }) => ({
+              header: () => null,
+            })}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
 
