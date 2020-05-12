@@ -15,6 +15,7 @@ export default function App() {
           toValue: 1,
           duration: 500,
           easing: Easing.poly(5),
+          useNativeDriver: true,
         }).start(({ finished }) => {
           console.log("Animation was finished:", finished);
           setTimeout(() => {
@@ -22,6 +23,7 @@ export default function App() {
               toValue: 0,
               duration: 500,
               easing: Easing.poly(5),
+              useNativeDriver: true,
             }).start(() => {
               isAnimatingRef.current = false;
             });
@@ -32,12 +34,12 @@ export default function App() {
       <View style={{ flex: 1, justifyContent: "flex-end" }}>
         <Animated.Image
           source={{
-            uri:
-              "https://i.pinimg.com/564x/9d/bb/78/9dbb78df3604587ae97ffc7ed364e363.jpg",
+            uri: "https://aven.sfo2.digitaloceanspaces.com/ReactorAlert.jpg",
           }}
           style={{
             aspectRatio: 52 / 39,
             alignSelf: "stretch",
+            opacity: errorProgress,
             transform: [
               {
                 translateY: errorProgress.interpolate({

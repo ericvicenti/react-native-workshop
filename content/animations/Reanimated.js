@@ -34,8 +34,7 @@ export default function App() {
       <View style={{ flex: 1, justifyContent: "flex-end" }}>
         <Animated.Image
           source={{
-            uri:
-              "https://i.pinimg.com/564x/9d/bb/78/9dbb78df3604587ae97ffc7ed364e363.jpg",
+            uri: "https://aven.sfo2.digitaloceanspaces.com/ReactorAlert.jpg",
           }}
           onLayout={({ nativeEvent }) => {
             photoHeight.setValue(nativeEvent.layout.height);

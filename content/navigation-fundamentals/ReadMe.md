@@ -93,8 +93,6 @@ https://reactnavigation.org/docs/navigation-prop
 
 # Tabs, Modals, and Drawers
 
-See the example code: [Chapter4.tsx](../Chapter4.tsx)
-
 ## Nesting Navigators
 
 ## Modal Stack

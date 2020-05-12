@@ -14,15 +14,13 @@ let taskList: Array<Task> = [
     id: "1",
     title: "Build app",
     status: null,
-    imageUri:
-      "https://vignette.wikia.nocookie.net/simpsons/images/0/09/800px-Springfield_Nuclear_Power_Plant.png/revision/latest/top-crop/width/360/height/360?cb=20170101231010",
+    imageUri: "https://aven.sfo2.digitaloceanspaces.com/TaskReactor1.png",
   },
   {
     id: "2",
     title: "Test app",
     status: null,
-    imageUri:
-      "https://www.power-technology.com/wp-content/uploads/sites/7/2020/04/air-air-pollution-chimney-clouds-459728.jpg",
+    imageUri: "https://aven.sfo2.digitaloceanspaces.com/TaskReactor2.jpg",
   },
 ];
 let idCount = 2;

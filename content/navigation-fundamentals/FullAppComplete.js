@@ -113,6 +113,84 @@ function TagsScreen({ navigation }) {
   );
 }
 
+const MainStack = createStackNavigator();
+function MainStackScreen() {
+  return (
+    <MainStack.Navigator>
+      <MainStack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          title: "Task Reactor!",
+        }}
+      />
+      <MainStack.Screen
+        name="Task"
+        component={TaskScreen}
+        options={({ route, navigation }) => ({
+          title: route.params.title,
+          headerRight: () => (
+            <Button
+              title="Discuss"
+              color="#239"
+              onPress={() => {
+                navigation.navigate("Discuss", {
+                  id: route.params.id,
+                });
+              }}
+            />
+          ),
+        })}
+      />
+      <MainStack.Screen
+        name="Discuss"
+        component={DiscussScreen}
+        options={({ route, navigation }) => ({
+          title: `Discuss Task`,
+        })}
+      />
+    </MainStack.Navigator>
+  );
+}
+const TagStack = createStackNavigator();
+function TagsStackScreen() {
+  return (
+    <TagStack.Navigator>
+      <TagStack.Screen
+        name="Tags"
+        component={TagsScreen}
+        options={{
+          title: "Task Tags",
+        }}
+      />
+      <TagStack.Screen
+        name="Task"
+        component={TaskScreen}
+        options={({ route, navigation }) => ({
+          title: route.params.title,
+          headerRight: () => (
+            <Button
+              title="Discuss"
+              color="#239"
+              onPress={() => {
+                navigation.navigate("Discuss", {
+                  id: route.params.id,
+                });
+              }}
+            />
+          ),
+        })}
+      />
+      <TagStack.Screen
+        name="Discuss"
+        component={DiscussScreen}
+        options={({ route, navigation }) => ({
+          title: `Discuss Task`,
+        })}
+      />
+    </TagStack.Navigator>
+  );
+}
 function TitleScreen({ title }) {
   return (
     <View style={{ flex: 1, justifyContent: "center" }}>
@@ -135,45 +213,76 @@ function SystemStatusScreen() {
 function DiscussScreen() {
   return <TitleScreen title="Discuss" />;
 }
+const Drawer = createDrawerNavigator();
 
-const MainStack = createStackNavigator();
+function SupportScreen() {
+  return (
+    <Drawer.Navigator initialRouteName="SupportHome">
+      <Drawer.Screen name="SupportHome" component={SupportHomeScreen} />
+      <Drawer.Screen name="ReportBug" component={ReportBugScreen} />
+      <Drawer.Screen name="SystemStatus" component={SystemStatusScreen} />
+    </Drawer.Navigator>
+  );
+}
+const MainTabs = createBottomTabNavigator();
+function MainTabsScreen() {
+  return (
+    <MainTabs.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === "Support") {
+            iconName = focused ? "ios-help-circle" : "ios-help-circle-outline";
+          } else if (route.name === "Home") {
+            iconName = focused ? "ios-checkbox" : "ios-checkbox-outline";
+          } else if (route.name === "Tags") {
+            iconName = focused ? "ios-list-box" : "ios-list";
+          } else {
+            iconName = focused ? "ios-cloud" : "ios-cloud-outline";
+          }
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+      })}
+      tabBarOptions={{
+        activeTintColor: "tomato",
+        inactiveTintColor: "gray",
+      }}
+    >
+      <MainTabs.Screen name="Home" component={MainStackScreen} />
+      <MainTabs.Screen name="Tags" component={TagsStackScreen} />
+      <MainTabs.Screen name="History" component={HistoryScreen} />
+      <MainTabs.Screen name="Support" component={SupportScreen} />
+    </MainTabs.Navigator>
+  );
+}
+
+const RootStack = createStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <MainStack.Navigator>
-        <MainStack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{
-            title: "Task Reactor!",
-          }}
+      <RootStack.Navigator mode="modal">
+        <RootStack.Screen
+          name="Main"
+          component={MainTabsScreen}
+          options={{ headerShown: false }}
         />
-        <MainStack.Screen
-          name="Task"
-          component={TaskScreen}
-          options={({ route, navigation }) => ({
-            title: route.params.title,
+        <RootStack.Screen
+          name="NewTask"
+          component={NewTaskScreen}
+          options={({ navigation }) => ({
+            title: "Add Task",
+            headerLeft: null,
             headerRight: () => (
               <Button
-                title="Discuss"
-                color="#239"
+                title="cancel"
                 onPress={() => {
-                  navigation.navigate("Discuss", {
-                    id: route.params.id,
-                  });
+                  navigation.goBack();
                 }}
               />
             ),
           })}
         />
-        <MainStack.Screen
-          name="Discuss"
-          component={DiscussScreen}
-          options={({ route, navigation }) => ({
-            title: `Discuss Task`,
-          })}
-        />
-      </MainStack.Navigator>
+      </RootStack.Navigator>
     </NavigationContainer>
   );
 }
