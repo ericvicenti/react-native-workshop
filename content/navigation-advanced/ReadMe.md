@@ -90,7 +90,7 @@ In addition to persisting the state, onStateChange is useful for reporting the u
 
 # III. Shared Element Transitions
 
-Create beautiful transitions with (react-navigation-shared-element)[https://github.com/IjzerenHein/react-navigation-shared-element/tree/navigation-v5]
+Create beautiful transitions with [react-navigation-shared-element](https://github.com/IjzerenHein/react-navigation-shared-element/tree/navigation-v5)
 
 **Warning** this is experimental right now, and is not yet reccomended for production.
 
