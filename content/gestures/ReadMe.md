@@ -19,5 +19,3 @@ Example with Reanimated
 ## PanGestureHandler
 
 Basic Pan Example
-
-Pan Example in Task Reactor

@@ -12,6 +12,7 @@ import {
   setTaskStatus,
 } from "../../logic/TaskLogic";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import Animated, { Easing } from "react-native-reanimated";
 
 const cancelledColor = "#922";
 const doneColor = "#292";
@@ -34,7 +35,22 @@ function CancelledIcon() {
 function TaskStatusRow({ status, onStatus }) {
   const currentStatus =
     status === "cancelled" ? -1 : status === "complete" ? 1 : 0;
-
+  const [currentStatusValue] = React.useState(new Animated.Value(0));
+  const cancelledProgress = currentStatusValue.interpolate({
+    inputRange: [-1, 0],
+    outputRange: [1, 0],
+  });
+  const doneProgress = currentStatusValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
+  React.useEffect(() => {
+    Animated.timing(currentStatusValue, {
+      duration: 500,
+      easing: Easing.linear,
+      toValue: currentStatus,
+    }).start();
+  }, [currentStatus]);
   return (
     <View
       style={{
@@ -43,12 +59,20 @@ function TaskStatusRow({ status, onStatus }) {
         marginVertical: 20,
       }}
     >
-      <View style={{}}>
+      <Animated.View
+        style={{
+          opacity: cancelledProgress,
+        }}
+      >
         <CancelledIcon />
-      </View>
-      <View style={{}}>
+      </Animated.View>
+      <Animated.View
+        style={{
+          opacity: doneProgress,
+        }}
+      >
         <DoneIcon />
-      </View>
+      </Animated.View>
       <View
         style={{
           position: "absolute",
@@ -61,17 +85,22 @@ function TaskStatusRow({ status, onStatus }) {
         }}
       >
         <View>
-          <Text style={{ color: doneColor, fontSize: 32 }}>Complete</Text>
+          <Animated.Text
+            style={{ color: doneColor, fontSize: 32, opacity: doneProgress }}
+          >
+            Complete
+          </Animated.Text>
         </View>
         <View>
-          <Text
+          <Animated.Text
             style={{
               color: cancelledColor,
               fontSize: 32,
+              opacity: cancelledProgress,
             }}
           >
             Cancelled
-          </Text>
+          </Animated.Text>
         </View>
       </View>
     </View>

@@ -1,4 +1,4 @@
-import App from "./Welcome";
+// import App from "./Welcome";
 
 // import App from "./content/navigation-fundamentals/BasicStack";
 // import App from "./content/navigation-fundamentals/FullApp";
@@ -13,10 +13,10 @@ import App from "./Welcome";
 // import App from "./content/navigation-advanced/SharedElement";
 
 // import App from "./content/animations/AnimatedToast";
-// import App from "./content/animations/Reanimated";
 // import App from "./content/animations/TaskStatus";
+// import App from "./content/animations/Transitions";
 
 // import App from "./content/gestures/TapHandler";
-// import App from "./content/gestures/Swiper";
+import App from "./content/gestures/Dragging";
 
 export default App;
