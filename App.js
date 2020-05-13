@@ -12,11 +12,11 @@
 // import App from "./content/navigation-advanced/StatePersistence";
 // import App from "./content/navigation-advanced/SharedElement";
 
-// import App from "./content/animations/AnimatedToast";
+import App from "./content/animations/AnimatedToast";
 // import App from "./content/animations/TaskStatus";
-// import App from "./content/animations/Transitions";
+// import App from "./content/animations/TransitionsComplete";
 
 // import App from "./content/gestures/TapHandler";
-import App from "./content/gestures/Dragging";
+// import App from "./content/gestures/Dragging";
 
 export default App;

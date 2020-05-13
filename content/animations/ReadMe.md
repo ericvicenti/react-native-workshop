@@ -16,3 +16,5 @@
 - All properties are native animatable
 
 # Reanimated Transitions
+
+https://github.com/software-mansion/react-native-reanimated/tree/master/Example/src/transitions
